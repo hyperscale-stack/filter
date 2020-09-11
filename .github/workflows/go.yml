@@ -23,12 +23,17 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build
-      run: go build -race -v .
+      run: go build -race -v ./...
 
     - name: Test
-      run: go test -race -cover .
+      run: go test -race -cover -coverprofile ./coverage.out ./...
 
     - name: Run golangci-lint
       uses: golangci/golangci-lint-action@v1.2.1
       with:
         version: v1.31
+
+    - name: Coveralls
+      uses: shogo82148/actions-goveralls@v1
+      with:
+        path-to-profile: coverage.out
