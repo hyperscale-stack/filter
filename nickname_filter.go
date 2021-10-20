@@ -22,7 +22,7 @@ type nicknameFilter struct {
 	stripChars []string
 }
 
-// NewNicknameFilter constructor
+// NewNicknameFilter constructor.
 func NewNicknameFilter() Filter {
 	return &nicknameFilter{
 		stripChars: nicknameDefaultStripChars,
@@ -35,7 +35,7 @@ func (f nicknameFilter) Filter(value Value) (Value, error) {
 		nickname := slug.Make(val)
 
 		for _, c := range f.stripChars {
-			nickname = strings.Replace(nickname, c, "", -1)
+			nickname = strings.ReplaceAll(nickname, c, "")
 		}
 
 		return nickname, nil

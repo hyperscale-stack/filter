@@ -13,7 +13,7 @@ import (
 type boolFilter struct {
 }
 
-// NewBoolFilter constructor
+// NewBoolFilter constructor.
 func NewBoolFilter() Filter {
 	return &boolFilter{}
 }

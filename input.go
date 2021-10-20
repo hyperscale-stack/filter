@@ -4,10 +4,10 @@
 
 package filter
 
-// InputValue type
+// InputValue type.
 type InputValue map[string]interface{}
 
-// InputFilter interface
+// InputFilter interface.
 type InputFilter interface {
 	Filter(input map[string]interface{}) (map[string]interface{}, error)
 }
@@ -16,7 +16,7 @@ type inputFilter struct {
 	filters map[string][]Filter
 }
 
-// NewInputFilter constructor
+// NewInputFilter constructor.
 func NewInputFilter(filters map[string][]Filter) InputFilter {
 	return &inputFilter{
 		filters: filters,
@@ -30,7 +30,9 @@ func (f inputFilter) filterField(key string, value Value) (Value, error) {
 	}
 
 	val := value
+
 	var err error
+
 	for _, filter := range filters {
 		val, err = filter.Filter(val)
 		if err != nil {

@@ -4,7 +4,7 @@
 
 package filter
 
-// URLOption type
+// URLOption type.
 type URLOption func(*urlFilter)
 
 var utmQueryParameters = []string{
@@ -15,6 +15,7 @@ var utmQueryParameters = []string{
 	"utm_content",
 }
 
+// URLStripUTMParameters remove all utm_* query parameters.
 func URLStripUTMParameters() URLOption {
 	return func(uf *urlFilter) {
 		uf.stripQueryParameters = append(uf.stripQueryParameters, utmQueryParameters...)

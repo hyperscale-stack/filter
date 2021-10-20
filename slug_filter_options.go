@@ -4,9 +4,10 @@
 
 package filter
 
-// SlugOption type
+// SlugOption type.
 type SlugOption func(*slugFilter)
 
+// SlugLanguage config language for SlugFilter.
 func SlugLanguage(language string) SlugOption {
 	return func(f *slugFilter) {
 		f.language = language

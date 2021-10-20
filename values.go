@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-// ValuesFilter interface
+// ValuesFilter interface.
 type ValuesFilter interface {
 	Filter(input url.Values) (url.Values, error)
 }
@@ -18,7 +18,7 @@ type valuesFilter struct {
 	filters map[string][]Filter
 }
 
-// NewValuesFilter constructor
+// NewValuesFilter constructor.
 func NewValuesFilter(filters map[string][]Filter) ValuesFilter {
 	return &valuesFilter{
 		filters: filters,
@@ -35,6 +35,7 @@ func (f valuesFilter) filterField(key string, values []Value) ([]Value, error) {
 
 	for i, value := range values {
 		val := value
+
 		var err error
 
 		for _, filter := range filters {

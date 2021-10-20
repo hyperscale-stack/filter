@@ -13,7 +13,7 @@ import (
 type stringTrimFilter struct {
 }
 
-// NewStringTrimFilter constructor
+// NewStringTrimFilter constructor.
 func NewStringTrimFilter() Filter {
 	return &stringTrimFilter{}
 }

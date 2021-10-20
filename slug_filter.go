@@ -15,7 +15,7 @@ type slugFilter struct {
 	language string
 }
 
-// NewSlugFilter constructor
+// NewSlugFilter constructor.
 func NewSlugFilter(opts ...SlugOption) Filter {
 	f := &slugFilter{
 		language: "en",

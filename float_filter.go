@@ -13,7 +13,7 @@ import (
 type floatFilter struct {
 }
 
-// NewFloatFilter constructor
+// NewFloatFilter constructor.
 func NewFloatFilter() Filter {
 	return &floatFilter{}
 }

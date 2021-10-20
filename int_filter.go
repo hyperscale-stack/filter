@@ -13,7 +13,7 @@ import (
 type intFilter struct {
 }
 
-// NewIntFilter constructor
+// NewIntFilter constructor.
 func NewIntFilter() Filter {
 	return &intFilter{}
 }

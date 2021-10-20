@@ -14,7 +14,7 @@ type urlFilter struct {
 	stripQueryParameters []string
 }
 
-// NewURLFilter constructor
+// NewURLFilter constructor.
 func NewURLFilter(opts ...URLOption) Filter {
 	f := &urlFilter{
 		stripQueryParameters: []string{},

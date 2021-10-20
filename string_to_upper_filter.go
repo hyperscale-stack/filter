@@ -13,7 +13,7 @@ import (
 type stringToUpperFilter struct {
 }
 
-// NewStringToUpperFilter constructor
+// NewStringToUpperFilter constructor.
 func NewStringToUpperFilter() Filter {
 	return &stringToUpperFilter{}
 }

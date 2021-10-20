@@ -13,7 +13,7 @@ import (
 type stringToLowerFilter struct {
 }
 
-// NewStringToLowerFilter constructor
+// NewStringToLowerFilter constructor.
 func NewStringToLowerFilter() Filter {
 	return &stringToLowerFilter{}
 }
