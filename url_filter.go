@@ -8,24 +8,23 @@ import (
 	"fmt"
 	"net/url"
 	"reflect"
-
-	"github.com/pkg/errors"
 )
 
-var badQueryParameters = []string{
-	"utm_source",
-	"utm_medium",
-	"utm_campaign",
-	"utm_term",
-	"utm_content",
-}
-
 type urlFilter struct {
+	stripQueryParameters []string
 }
 
-// NewURLFilter constructor
-func NewURLFilter() Filter {
-	return &urlFilter{}
+// NewURLFilter constructor.
+func NewURLFilter(opts ...URLOption) Filter {
+	f := &urlFilter{
+		stripQueryParameters: []string{},
+	}
+
+	for _, opt := range opts {
+		opt(f)
+	}
+
+	return f
 }
 
 func (f urlFilter) Filter(value Value) (Value, error) {
@@ -33,12 +32,12 @@ func (f urlFilter) Filter(value Value) (Value, error) {
 	case string:
 		u, err := url.Parse(val)
 		if err != nil {
-			return value, err
+			return value, fmt.Errorf("parsing url failed: %w", err)
 		}
 
 		q := u.Query()
 
-		for _, key := range badQueryParameters {
+		for _, key := range f.stripQueryParameters {
 			q.Del(key)
 		}
 
@@ -46,6 +45,6 @@ func (f urlFilter) Filter(value Value) (Value, error) {
 
 		return u.String(), nil
 	default:
-		return value, errors.Wrap(fmt.Errorf("unsupported type %v", reflect.TypeOf(value)), "URLFilter")
+		return value, fmt.Errorf("URLFilter: unsupported type %v", reflect.TypeOf(value))
 	}
 }

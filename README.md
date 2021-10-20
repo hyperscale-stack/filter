@@ -11,6 +11,8 @@ The Hyperscale Filter library provides a set of commonly needed data filters. It
 
 ## Example
 
+Filter by `map[string]interface{}`
+
 ```go
 package main
 
@@ -37,6 +39,38 @@ func main() {
 }
 
 ```
+
+
+Filter by `url.Values`
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/hyperscale-stack/filter"
+)
+
+func main() {
+
+    i := NewValuesFilter(map[string][]Filter{
+		"email": {
+			NewStringToLowerFilter(),
+		},
+	})
+
+    values := url.Values{}
+    values.Set("email", "STEVE@APPLE.COM")
+
+	value, err := i.Filter(values)
+    // return 
+    // url.Values{
+	//     "email":  []string{"steve@apple.com"},
+    // }
+}
+
+```
+
 
 ## License
 

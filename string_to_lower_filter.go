@@ -8,14 +8,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 type stringToLowerFilter struct {
 }
 
-// NewStringToLowerFilter constructor
+// NewStringToLowerFilter constructor.
 func NewStringToLowerFilter() Filter {
 	return &stringToLowerFilter{}
 }
@@ -25,6 +23,6 @@ func (f stringToLowerFilter) Filter(value Value) (Value, error) {
 	case string:
 		return strings.ToLower(val), nil
 	default:
-		return value, errors.Wrap(fmt.Errorf("unsupported type %v", reflect.TypeOf(value)), "StringToLowerFilter")
+		return value, fmt.Errorf("StringToLowerFilter: unsupported type %v", reflect.TypeOf(value))
 	}
 }

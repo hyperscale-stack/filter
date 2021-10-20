@@ -4,10 +4,10 @@
 
 package filter
 
-// Value type
+// Value type.
 type Value interface{}
 
-// Filter interface
+// Filter interface.
 type Filter interface {
 	Filter(value Value) (Value, error)
 }

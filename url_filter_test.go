@@ -11,7 +11,7 @@ import (
 )
 
 func TestURLFilter(t *testing.T) {
-	f := NewURLFilter()
+	f := NewURLFilter(URLStripUTMParameters())
 
 	assertions := []struct {
 		value    string
