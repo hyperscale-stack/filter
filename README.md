@@ -29,7 +29,7 @@ func main() {
 		},
 	})
 
-	value, err := i.Filter(map[string]interface{}{
+	value, err := i.FilterMap(map[string]interface{}{
 		"email":  "STEVE@APPLE.COM",
     })
     // return 
@@ -53,7 +53,7 @@ import (
 
 func main() {
 
-    i := NewValuesFilter(map[string][]Filter{
+    i := NewInputFilter(map[string][]Filter{
 		"email": {
 			NewStringToLowerFilter(),
 		},
@@ -62,7 +62,7 @@ func main() {
     values := url.Values{}
     values.Set("email", "STEVE@APPLE.COM")
 
-	value, err := i.Filter(values)
+	value, err := i.FilterValues(values)
     // return 
     // url.Values{
 	//     "email":  []string{"steve@apple.com"},

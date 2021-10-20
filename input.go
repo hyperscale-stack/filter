@@ -4,12 +4,18 @@
 
 package filter
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // InputValue type.
 type InputValue map[string]interface{}
 
 // InputFilter interface.
 type InputFilter interface {
-	Filter(input map[string]interface{}) (map[string]interface{}, error)
+	FilterMap(input map[string]interface{}) (map[string]interface{}, error)
+	FilterValues(input url.Values) (url.Values, error)
 }
 
 type inputFilter struct {
@@ -43,7 +49,7 @@ func (f inputFilter) filterField(key string, value Value) (Value, error) {
 	return val, nil
 }
 
-func (f inputFilter) Filter(input map[string]interface{}) (map[string]interface{}, error) {
+func (f inputFilter) FilterMap(input map[string]interface{}) (map[string]interface{}, error) {
 	for key, val := range input {
 		val, err := f.filterField(key, val)
 		if err != nil {
@@ -54,4 +60,68 @@ func (f inputFilter) Filter(input map[string]interface{}) (map[string]interface{
 	}
 
 	return input, nil
+}
+
+func (f inputFilter) filterFieldValues(key string, values []Value) ([]Value, error) {
+	filters, ok := f.filters[key]
+	if !ok {
+		return values, nil
+	}
+
+	retvals := make([]Value, len(values))
+
+	for i, value := range values {
+		val := value
+
+		var err error
+
+		for _, filter := range filters {
+			val, err = filter.Filter(val)
+			if err != nil {
+				return retvals, err
+			}
+
+			retvals[i] = val
+		}
+	}
+
+	return retvals, nil
+}
+
+func (f inputFilter) castSliceStringToSliceValue(values []string) []Value {
+	retvals := make([]Value, len(values))
+
+	for i, val := range values {
+		retvals[i] = val
+	}
+
+	return retvals
+}
+
+func (f inputFilter) castSliceValueToSliceString(values []Value) []string {
+	retvals := make([]string, len(values))
+
+	for i, val := range values {
+		switch v := val.(type) {
+		case string:
+			retvals[i] = v
+		default:
+			retvals[i] = fmt.Sprintf("%v", val)
+		}
+	}
+
+	return retvals
+}
+
+func (f inputFilter) FilterValues(values url.Values) (url.Values, error) {
+	for key, vals := range values {
+		vals, err := f.filterFieldValues(key, f.castSliceStringToSliceValue(vals))
+		if err != nil {
+			return values, err
+		}
+
+		values[key] = f.castSliceValueToSliceString(vals)
+	}
+
+	return values, nil
 }
