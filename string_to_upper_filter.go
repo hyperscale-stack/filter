@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 type stringToUpperFilter struct {
@@ -25,6 +23,6 @@ func (f stringToUpperFilter) Filter(value Value) (Value, error) {
 	case string:
 		return strings.ToUpper(val), nil
 	default:
-		return value, errors.Wrap(fmt.Errorf("unsupported type %v", reflect.TypeOf(value)), "StringToUpperFilter")
+		return value, fmt.Errorf("StringToUpperFilter: unsupported type %v", reflect.TypeOf(value))
 	}
 }

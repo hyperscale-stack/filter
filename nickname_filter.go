@@ -10,27 +10,36 @@ import (
 	"strings"
 
 	"github.com/gosimple/slug"
-	"github.com/pkg/errors"
 )
 
+var nicknameDefaultStripChars = []string{
+	"-",
+	".",
+	"_",
+}
+
 type nicknameFilter struct {
+	stripChars []string
 }
 
 // NewNicknameFilter constructor
 func NewNicknameFilter() Filter {
-	return &nicknameFilter{}
+	return &nicknameFilter{
+		stripChars: nicknameDefaultStripChars,
+	}
 }
 
 func (f nicknameFilter) Filter(value Value) (Value, error) {
 	switch val := value.(type) {
 	case string:
 		nickname := slug.Make(val)
-		nickname = strings.Replace(nickname, "-", "", -1)
-		nickname = strings.Replace(nickname, ".", "", -1)
-		nickname = strings.Replace(nickname, "_", "", -1)
+
+		for _, c := range f.stripChars {
+			nickname = strings.Replace(nickname, c, "", -1)
+		}
 
 		return nickname, nil
 	default:
-		return value, errors.Wrap(fmt.Errorf("unsupported type %v", reflect.TypeOf(value)), "NicknameFilter")
+		return value, fmt.Errorf("NicknameFilter: unsupported type %v", reflect.TypeOf(value))
 	}
 }
