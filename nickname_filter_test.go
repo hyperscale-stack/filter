@@ -58,3 +58,11 @@ func TestNicknameFilterWithBadValue(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, 1345, u)
 }
+
+func BenchmarkNicknameFilter(b *testing.B) {
+	f := NewNicknameFilter()
+
+	for i := 0; i < b.N; i++ {
+		f.Filter("Euskadi 31")
+	}
+}

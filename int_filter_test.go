@@ -46,3 +46,11 @@ func TestIntFilterWithBadValue(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, true, u)
 }
+
+func BenchmarkIntFilter(b *testing.B) {
+	f := NewIntFilter()
+
+	for i := 0; i < b.N; i++ {
+		f.Filter("123456789")
+	}
+}

@@ -46,3 +46,11 @@ func TestURLFilterWithBadValue(t *testing.T) {
 	assert.Equal(t, "134://foo", u)
 	assert.Error(t, err)
 }
+
+func BenchmarkURLFilter(b *testing.B) {
+	f := NewURLFilter(URLStripUTMParameters())
+
+	for i := 0; i < b.N; i++ {
+		f.Filter("https://www.google.fr/?foo=bar&utm_source=test&utm_medium=test1&utm_campaign=test2&utm_term=test3&utm_content=test4")
+	}
+}

@@ -58,3 +58,11 @@ func TestBoolFilterWithBadValue(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, 5.5, u)
 }
+
+func BenchmarkBoolFilter(b *testing.B) {
+	f := NewBoolFilter()
+
+	for i := 0; i < b.N; i++ {
+		f.Filter("true")
+	}
+}

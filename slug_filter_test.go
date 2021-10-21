@@ -75,3 +75,11 @@ func TestSlugFilterWithBadValue(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, 1345, u)
 }
+
+func BenchmarkSlugFilter(b *testing.B) {
+	f := NewSlugFilter()
+
+	for i := 0; i < b.N; i++ {
+		f.Filter("Test Title")
+	}
+}

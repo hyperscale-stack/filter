@@ -42,3 +42,11 @@ func TestStringToLowerFilterWithBadValue(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, 12345, u)
 }
+
+func BenchmarkStringToLowerFilter(b *testing.B) {
+	f := NewStringToLowerFilter()
+
+	for i := 0; i < b.N; i++ {
+		f.Filter("Test Title")
+	}
+}

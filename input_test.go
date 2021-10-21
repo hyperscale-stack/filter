@@ -87,3 +87,44 @@ func TestInputFilterWithBadValue(t *testing.T) {
 		}, value)
 	}
 }
+
+func BenchmarkInputFilterMap(b *testing.B) {
+	f := NewInputFilter(map[string][]Filter{
+		"url": {
+			NewURLFilter(URLStripUTMParameters()),
+		},
+		"size": {
+			NewIntFilter(),
+		},
+	})
+
+	input := map[string]interface{}{
+		"url":  "https://www.google.fr/?utm_source=test&utm_medium=test1&utm_campaign=test2&utm_term=test3&utm_content=test4",
+		"name": "Title",
+		"size": "1024",
+	}
+
+	for i := 0; i < b.N; i++ {
+		f.FilterMap(input)
+	}
+}
+
+func BenchmarkInputFilterValues(b *testing.B) {
+	f := NewInputFilter(map[string][]Filter{
+		"url": {
+			NewURLFilter(URLStripUTMParameters()),
+		},
+		"size": {
+			NewIntFilter(),
+		},
+	})
+
+	values := url.Values{}
+	values.Set("url", "https://www.google.fr/?utm_source=test&utm_medium=test1&utm_campaign=test2&utm_term=test3&utm_content=test4")
+	values.Set("name", "Title")
+	values.Set("size", "1024")
+
+	for i := 0; i < b.N; i++ {
+		f.FilterValues(values)
+	}
+}
