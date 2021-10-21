@@ -36,7 +36,6 @@ jobs:
         cat coverage.txt >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
-
     - uses: actions/github-script@v4
       if: github.event_name == 'pull_request'
       env:
@@ -63,6 +62,62 @@ jobs:
 
           if (comments.length > 0) {
             comments = comments.filter(comment => comment.body.includes('Code Coverage') && comment.user.type === 'Bot');
+          }
+
+          if (comments.length > 0) {
+            const comment = comments.shift();
+
+            github.issues.updateComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: comment.id,
+              body: output
+            })
+          } else {
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+          }
+
+
+    - name: Benchmark
+      id: benchmark
+      run: |
+        go test -benchmem -bench . | tee -a benchmark.txt
+        echo "BENCHMARK_CONTENT<<EOF" >> $GITHUB_ENV
+        cat benchmark.txt >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
+    - uses: actions/github-script@v4
+      if: github.event_name == 'pull_request'
+      env:
+        BENCHMARK_CONTENT: "${{ env.BENCHMARK_CONTENT }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `Benchmark\n
+          \`\`\`\n
+          ${process.env.BENCHMARK_CONTENT}
+          \`\`\`
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+          const response = await github.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+
+          var comments = response.data;
+
+          console.log(comments);
+
+          if (comments.length > 0) {
+            comments = comments.filter(comment => comment.body.includes('Benchmark') && comment.user.type === 'Bot');
           }
 
           if (comments.length > 0) {
