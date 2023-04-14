@@ -38,6 +38,7 @@ jobs:
 
     - uses: actions/github-script@v4
       if: github.event_name == 'pull_request'
+      continue-on-error: true
       env:
         COVERAGE_CONTENT: "${{ env.COVERAGE_CONTENT }}"
       with:
@@ -94,6 +95,7 @@ jobs:
 
     - uses: actions/github-script@v4
       if: github.event_name == 'pull_request'
+      continue-on-error: true
       env:
         BENCHMARK_CONTENT: "${{ env.BENCHMARK_CONTENT }}"
       with:
