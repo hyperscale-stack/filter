@@ -40,7 +40,7 @@ func (f sliceFilter) Filter(value Value) (Value, error) {
 		for _, ftr := range f.filters {
 			v, err := ftr.Filter(val)
 			if err != nil {
-				return value, err
+				return value, fmt.Errorf("apply filter: %w", err)
 			}
 
 			val = v
