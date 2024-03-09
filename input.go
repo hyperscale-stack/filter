@@ -42,7 +42,7 @@ func (f inputFilter) filterField(key string, value Value) (Value, error) {
 	for _, filter := range filters {
 		val, err = filter.Filter(val)
 		if err != nil {
-			return val, err
+			return val, fmt.Errorf("apply filter: %w", err)
 		}
 	}
 
@@ -53,7 +53,7 @@ func (f inputFilter) FilterMap(input map[string]interface{}) (map[string]interfa
 	for key, val := range input {
 		val, err := f.filterField(key, val)
 		if err != nil {
-			return input, err
+			return input, fmt.Errorf("apply filter: %w", err)
 		}
 
 		input[key] = val
@@ -78,7 +78,7 @@ func (f inputFilter) filterFieldValues(key string, values []Value) ([]Value, err
 		for _, filter := range filters {
 			val, err = filter.Filter(val)
 			if err != nil {
-				return retvals, err
+				return retvals, fmt.Errorf("apply filter: %w", err)
 			}
 
 			retvals[i] = val
@@ -117,7 +117,7 @@ func (f inputFilter) FilterValues(values url.Values) (url.Values, error) {
 	for key, vals := range values {
 		vals, err := f.filterFieldValues(key, f.castSliceStringToSliceValue(vals))
 		if err != nil {
-			return values, err
+			return values, fmt.Errorf("apply filter: %w", err)
 		}
 
 		values[key] = f.castSliceValueToSliceString(vals)

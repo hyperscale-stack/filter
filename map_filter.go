@@ -49,7 +49,7 @@ func (f mapFilter) Filter(value Value) (Value, error) {
 			for _, filter := range filters {
 				val, err := filter.Filter(data[key.String()])
 				if err != nil {
-					return value, err
+					return value, fmt.Errorf("apply filter: %w", err)
 				}
 
 				data[key.String()] = val
